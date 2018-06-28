@@ -20,9 +20,21 @@ namespace timestamps_editor
             {
                 string s = sr.ReadLine();
                 double n = double.Parse(s.Split(']')[0].Split(':')[1], System.Globalization.CultureInfo.InvariantCulture);
+                int n2 = Convert.ToInt32(s.Split(']')[0].Split(':')[0].Remove(0,1));
                 n+=time;
-                string number = n.ToString().Replace(',','.');
-                string output = s.Split(']')[0].Split(':')[0] + ':' + number + ']' + s.Split(']')[1];
+                if (n > 59.99)
+                {
+                    n2++;
+                    n -= 60;
+                }
+                string number = String.Format("{0:F2}", n).Replace(',','.');
+                if(number.Length<5)
+                {
+                    string nInit= number.Split('.')[0].PadLeft(2,'0');
+                    string nFin = number.Split('.')[1].PadLeft(2, '0');
+                    number = nInit + '.' + nFin;
+                }
+                string output = "["+ n2.ToString().PadLeft(2,'0') + ":" + number + "]" + s.Split(']')[1];
                 sw.WriteLine(output);
                 Console.WriteLine(output);
             }
